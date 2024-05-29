@@ -36,16 +36,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 애플리케이션 파일 복사
 COPY . .
 
-# 권한 및 소유자 설정 (루트 사용자로 실행)
-RUN chown -R python:python /app
+# 엔트리포인트 설정
+COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
-RUN chmod +x /app/discordbot.py
 
 # 사용자 전환
 USER python
 
-# 엔트리포인트 설정
-ENTRYPOINT ["/app/entrypoint.sh"]
-
 # 애플리케이션 시작
-CMD ["python3", "discordbot.py"]
+ENTRYPOINT ["/app/entrypoint.sh"]
