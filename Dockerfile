@@ -1,10 +1,10 @@
-FROM python:3.10-slim
+FROM python:3.9
 
 # 시스템 패키지 설치
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-      build-essential libssl-dev python3-dev git curl imagemagick \
-      default-libmysqlclient-dev libsqlite3-dev libpng-dev libpq-dev wget unzip && \
+      build-essential libssl-dev python3-dev git curl \
+      libpng-dev wget unzip && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -18,16 +18,14 @@ RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add
     rm /tmp/chromedriver.zip
 
 # Python 환경 설정
-RUN groupadd --gid 1000 python && \
-    useradd --uid 1000 --gid python --shell /bin/bash --create-home python
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 # pip 업그레이드 및 의존성 설치
 RUN python -m pip install --upgrade pip
 
 # 작업 디렉토리 설정
 WORKDIR /app
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
 
 # 의존성 파일 복사 및 설치
 COPY requirements.txt .
@@ -36,11 +34,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 애플리케이션 파일 복사
 COPY . .
 
-# 권한 설정
-RUN chown -R python:python /app
-
-# 사용자 전환
-USER python
-
-# 애플리케이션 시작
+# 애플리케이션 시작 (discordbot.py 파일이 존재한다고 가정)
 CMD ["python3", "discordbot.py"]
