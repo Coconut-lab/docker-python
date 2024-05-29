@@ -37,7 +37,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # 권한 설정
-RUN chmod +x entrypoint.py
+RUN chmod +x entrypoint.sh
 
 # 엔트리포인트 설정
 ENTRYPOINT ["/app/entrypoint.sh"]
