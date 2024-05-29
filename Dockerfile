@@ -19,6 +19,9 @@ RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add
 
 RUN groupadd -r python && useradd -r -g python python
 
+# Python 사용자가 비밀번호 없이 sudo를 사용할 수 있도록 설정
+RUN echo "python ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
 # Python 환경 설정
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
