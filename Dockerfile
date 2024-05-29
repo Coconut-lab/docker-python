@@ -39,6 +39,9 @@ COPY . .
 # 권한 및 소유자 설정
 RUN chown -R python:python /app
 
+# entrypoint.sh에 실행 권한 부여
+RUN chmod +x /app/entrypoint.sh
+
 # 사용자 전환
 USER python
 
