@@ -19,9 +19,6 @@ RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add
 
 RUN groupadd -r python && useradd -r -g python python
 
-# Python 사용자가 비밀번호 없이 sudo를 사용할 수 있도록 설정
-RUN echo "python ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
 # Python 환경 설정
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
@@ -39,8 +36,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 애플리케이션 파일 복사
 COPY . .
 
-# 권한 설정
-RUN chmod +x entrypoint.sh
+# 권한 및 소유자 설정
+RUN chown -R python:python /app
+
+# 사용자 전환
+USER python
 
 # 엔트리포인트 설정
 ENTRYPOINT ["/app/entrypoint.sh"]
