@@ -34,6 +34,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 애플리케이션 파일 복사
 COPY . .
 
+# 사용자 및 그룹 추가
+RUN groupadd -r python && useradd -r -g python python
+
 # 권한 설정
 RUN chown -R python:python /app
 
