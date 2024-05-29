@@ -6,6 +6,6 @@ set -e
 # sudo chmod -R 775 /app
 
 # 파일 권한 설정 (예: discordbot.py)
-chmod +x /app/discordbot.py
+# chmod +x /app/discordbot.py
 
 exec "$@"
