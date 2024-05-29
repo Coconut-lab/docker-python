@@ -36,11 +36,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 애플리케이션 파일 복사
 COPY . .
 
-# 권한 및 소유자 설정
+# 권한 및 소유자 설정 (루트 사용자로 실행)
 RUN chown -R python:python /app
-
-# entrypoint.sh에 실행 권한 부여
 RUN chmod +x /app/entrypoint.sh
+RUN chmod +x /app/discordbot.py
 
 # 사용자 전환
 USER python
