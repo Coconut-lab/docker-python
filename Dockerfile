@@ -3,8 +3,8 @@ FROM python:3.9
 # 시스템 패키지 설치
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-      build-essential libssl-dev python3-dev git curl \
-      libpng-dev wget unzip && \
+      build-essential libssl-dev python3-dev git curl imagemagick \
+      default-libmysqlclient-dev libsqlite3-dev libpng-dev libpq-dev wget unzip && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -16,8 +16,6 @@ RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add
     wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip && \
     unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/ && \
     rm /tmp/chromedriver.zip
-
-RUN groupadd -r python && useradd -r -g python python
 
 # Python 환경 설정
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -36,12 +34,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 애플리케이션 파일 복사
 COPY . .
 
-# 엔트리포인트 설정
-COPY entrypoint.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
-
-# 사용자 전환
-USER python
+# 권한 설정
+RUN chown -R python:python /app
 
 # 애플리케이션 시작
-ENTRYPOINT ["/app/entrypoint.sh"]
+CMD ["python3", "discordbot.py"]
