@@ -1,27 +1,46 @@
-FROM python:3.9-slim-buster
+FROM python:3.10-slim
 
+# 시스템 패키지 설치
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+      build-essential libssl-dev python3-dev git curl imagemagick \
+      default-libmysqlclient-dev libsqlite3-dev libpng-dev libpq-dev wget unzip && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Chrome 및 ChromeDriver 설치
+RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+    sh -c 'echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list' && \
+    apt-get update && \
+    apt-get install -y google-chrome-stable && \
+    wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip && \
+    unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/ && \
+    rm /tmp/chromedriver.zip
+
+# Python 환경 설정
+RUN groupadd --gid 1000 python && \
+    useradd --uid 1000 --gid python --shell /bin/bash --create-home python
+
+# pip 업그레이드 및 의존성 설치
+RUN python -m pip install --upgrade pip
+
+# 작업 디렉토리 설정
+WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED=1
 
-ARG UID=1000
-ARG GID=1000
+# 의존성 파일 복사 및 설치
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN groupadd -g "${GID}" python \
-  && useradd --create-home --no-log-init -u "${UID}" -g "${GID}" python
-WORKDIR /home/python
+# 애플리케이션 파일 복사
+COPY . .
 
-COPY --chown=python:python requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+# 권한 설정
+RUN chown -R python:python /app
 
-# USER 변경은 반드시 pip 패키지 설치 스크립트 이후에 작성되어야 함
-USER python:python
-ENV PATH="/home/${USER}/.local/bin:${PATH}"
-COPY --chown=python:python . .
+# 사용자 전환
+USER python
 
-ARG FLASK_ENV
-
-ENV FLASK_ENV=${FLASK_ENV}
-
-EXPOSE 5000
-
-CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]
+# 애플리케이션 시작
+CMD ["python3", "discordbot.py"]
