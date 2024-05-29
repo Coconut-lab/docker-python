@@ -1,8 +1,8 @@
-#!/usr/bin/bash
+#!/bin/bash
 set -e
 
-# 디렉토리 권한 설정
-chmod -R python:python /app
+# 디렉토리 소유자 변경
+chown -R python:python /app
 chmod -R 775 /app
 
 # 파일 권한 설정 (예: discordbot.py)
