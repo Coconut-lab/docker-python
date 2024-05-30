@@ -56,10 +56,10 @@ COPY entrypoint.sh .
 RUN chmod +x entrypoint.sh
 
 # 사용자 및 그룹 추가
-RUN groupadd -r python && useradd -r -g python python
+# RUN groupadd -r python && useradd -r -g python python
 
 # 권한 설정
-RUN chown -R python:python /app
+# RUN chown -R python:python /app
 
 # 애플리케이션 시작
 ENTRYPOINT ["/app/entrypoint.sh"]
