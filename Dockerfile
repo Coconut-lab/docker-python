@@ -49,10 +49,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 애플리케이션 파일 복사
 COPY . .
 
-# entrypoint.sh 파일 복사
+# entrypoint.sh 파일 복사 및 권한 설정
 COPY entrypoint.sh .
-
-# entrypoint.sh 파일에 실행 권한 부여
 RUN chmod +x entrypoint.sh
 
 # 사용자 및 그룹 추가
