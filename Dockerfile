@@ -14,6 +14,23 @@ RUN apt-get install -y libxss1 libappindicator1 libgconf-2-4 \
     fonts-liberation libasound2 libnspr4 libnss3 libx11-xcb1 libxtst6 lsb-release xdg-utils \
     libgbm1 libnss3 libatk-bridge2.0-0 libgtk-3-0 libx11-xcb1 libxcb-dri3-0
 
+# Chrome 및 ChromeDriver 버전 지정
+ENV CHROME_VERSION="125.0.6422.112"
+ENV CHROMEDRIVER_VERSION="125.0.6422.112"
+
+# Chrome 설치
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        google-chrome-stable=${CHROME_VERSION} && \
+    rm -rf /var/lib/apt/lists/*
+
+# ChromeDriver 설치
+RUN CHROMEDRIVER_URL="https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" && \
+    wget -q --continue -O /tmp/chromedriver.zip $CHROMEDRIVER_URL && \
+    unzip /tmp/chromedriver.zip -d /opt/chromedriver && \
+    chmod +x /opt/chromedriver/chromedriver && \
+    rm /tmp/chromedriver.zip
+
 # Chrome 의존성 패키지 설치
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
