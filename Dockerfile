@@ -55,5 +55,8 @@ RUN groupadd -r python && useradd -r -g python python
 # 권한 설정
 RUN chown -R python:python /app
 
+# entrypoint.sh 파일 복사
+COPY entrypoint.sh .
+
 # 애플리케이션 시작
-CMD ["python3", "discordbot.py"]
+ENTRYPOINT ["/app/entrypoint.sh"]
