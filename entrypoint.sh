@@ -1,11 +1,7 @@
-#!/usr/bin/bash
-set -e
+#!/bin/sh
 
-# 디렉토리 소유자 변경 (루트 권한으로 실행)
-# sudo chown -R python:python /app
-# sudo chmod -R 775 /app
+# 필요한 디렉터리에 대한 권한 설정
+chmod -R 777 /app
 
-# 파일 권한 설정 (예: discordbot.py)
-# chmod +x /app/discordbot.py
-
-exec "$@"
+# 애플리케이션 실행
+python3 /app/discordbot.py
