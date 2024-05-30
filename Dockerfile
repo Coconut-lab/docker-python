@@ -21,7 +21,8 @@ ENV CHROMEDRIVER_VERSION="125.0.6422.112"
 # Chrome 설치
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        google-chrome-stable=${CHROME_VERSION} && \
+        google-chrome-stable=${CHROME_VERSION} \
+        fonts-liberation && \
     rm -rf /var/lib/apt/lists/*
 
 # ChromeDriver 설치
