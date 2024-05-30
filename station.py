@@ -33,7 +33,7 @@ def station(num):
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
 
-    service = Service(executable_path='/usr/local/bin/chromedriver')
+    service = Service(executable_path='/opt/chromedriver/chromedriver')
 
     dr = webdriver.Chrome(service=service, options=chrome_options)  # 크롬 드라이버를 사용하여 브라우저를 실행
     dr.get(url)  # 설정한 URL로 이동
