@@ -53,6 +53,14 @@ COPY . .
 COPY entrypoint.sh .
 RUN chmod +x entrypoint.sh
 
+# 사용자 추가
+RUN adduser --disabled-password --gecos '' python
+
+#작업 디렉터리 소유권 변경
+RUN chown -R python:python /app
+
+USER python
+
 # 사용자 및 그룹 추가
 # RUN groupadd -r python && useradd -r -g python python
 
