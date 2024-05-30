@@ -3,29 +3,30 @@ FROM python:3.9
 # 시스템 패키지 설치
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-      build-essential libssl-dev python3-dev git curl imagemagick \
-      default-libmysqlclient-dev libsqlite3-dev libpng-dev libpq-dev wget unzip && \
+    build-essential libssl-dev python3-dev git curl imagemagick \
+    default-libmysqlclient-dev libsqlite3-dev libpng-dev libpq-dev wget unzip && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Chrome 및 ChromeDriver 설치
 RUN apt-get update -y && apt-get install -y wget xvfb unzip jq
+
 RUN apt-get install -y libxss1 libappindicator1 libgconf-2-4 \
-  fonts-liberation libasound2 libnspr4 libnss3 libx11-xcb1 libxtst6 lsb-release xdg-utils \
-  libgbm1 libnss3 libatk-bridge2.0-0 libgtk-3-0 libx11-xcb1 libxcb-dri3-0
+    fonts-liberation libasound2 libnspr4 libnss3 libx11-xcb1 libxtst6 lsb-release xdg-utils \
+    libgbm1 libnss3 libatk-bridge2.0-0 libgtk-3-0 libx11-xcb1 libxcb-dri3-0
 
-RUN curl -s https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json > /tmp/versions.json
+# Chrome 버전 125.0.6422.113 다운로드
+RUN CHROME_URL="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" && \
+    wget -q --continue -O /tmp/chrome.deb $CHROME_URL && \
+    dpkg -i /tmp/chrome.deb && \
+    rm /tmp/chrome.deb
 
-RUN CHROME_URL=$(jq -r '.channels.Stable.downloads.chrome[] | select(.platform=="linux64") | .url' /tmp/versions.json) && \
-  wget -q --continue -O /tmp/chrome-linux64.zip $CHROME_URL && \
-  unzip /tmp/chrome-linux64.zip -d /opt/chrome
-
-RUN chmod +x /opt/chrome/chrome-linux64/chrome
-
-RUN CHROMEDRIVER_URL=$(jq -r '.channels.Stable.downloads.chromedriver[] | select(.platform=="linux64") | .url' /tmp/versions.json) && \
-  wget -q --continue -O /tmp/chromedriver-linux64.zip $CHROMEDRIVER_URL && \
-  unzip /tmp/chromedriver-linux64.zip -d /opt/chromedriver && \
-  chmod +x /opt/chromedriver/chromedriver-linux64/chromedriver
+# ChromeDriver 버전 114.0.5735.90 다운로드
+RUN CHROMEDRIVER_URL="https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip" && \
+    wget -q --continue -O /tmp/chromedriver.zip $CHROMEDRIVER_URL && \
+    unzip /tmp/chromedriver.zip -d /opt/chromedriver && \
+    chmod +x /opt/chromedriver/chromedriver && \
+    rm /tmp/chromedriver.zip
 
 ENV CHROMEDRIVER_DIR /opt/chromedriver
 ENV PATH $CHROMEDRIVER_DIR:$PATH
