@@ -35,10 +35,15 @@ RUN CHROMEDRIVER_URL="https://chromedriver.storage.googleapis.com/114.0.5735.90/
     chmod +x /opt/chromedriver/chromedriver && \
     rm /tmp/chromedriver.zip
 
+# 임시 파일 삭제 (필요한 경우)
+RUN if [ -f /tmp/chrome-linux64.zip ] && [ -f /tmp/chromedriver-linux64.zip ] && [ -f /tmp/versions.json ]; then \
+        rm /tmp/chrome-linux64.zip /tmp/chromedriver-linux64.zip /tmp/versions.json; \
+    fi
+
 ENV CHROMEDRIVER_DIR /opt/chromedriver
 ENV PATH $CHROMEDRIVER_DIR:$PATH
 
-RUN rm /tmp/chrome-linux64.zip /tmp/chromedriver-linux64.zip /tmp/versions.json
+# RUN rm /tmp/chrome-linux64.zip /tmp/chromedriver-linux64.zip /tmp/versions.json
 
 # Python 환경 설정
 ENV PYTHONDONTWRITEBYTECODE=1
