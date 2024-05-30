@@ -21,8 +21,8 @@ ENV CHROMEDRIVER_VERSION="125.0.6422.112"
 # Chrome 설치
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        google-chrome-stable=${CHROME_VERSION} \
-        fonts-liberation && \
+    google-chrome-stable=${CHROME_VERSION} \
+    fonts-liberation && \
     rm -rf /var/lib/apt/lists/*
 
 # ChromeDriver 설치
@@ -35,33 +35,18 @@ RUN CHROMEDRIVER_URL="https://chromedriver.storage.googleapis.com/${CHROMEDRIVER
 # Chrome 의존성 패키지 설치
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        libu2f-udev \
-        libvulkan1 \
-        && \
+    libu2f-udev \
+    libvulkan1 \
+    && \
     rm -rf /var/lib/apt/lists/*
-
-# Chrome 버전 125.0.6422.113 다운로드
-RUN CHROME_URL="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" && \
-    wget -q --continue -O /tmp/chrome.deb $CHROME_URL && \
-    dpkg -i /tmp/chrome.deb && \
-    rm /tmp/chrome.deb
-
-# ChromeDriver 버전 114.0.5735.90 다운로드
-RUN CHROMEDRIVER_URL="https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip" && \
-    wget -q --continue -O /tmp/chromedriver.zip $CHROMEDRIVER_URL && \
-    unzip /tmp/chromedriver.zip -d /opt/chromedriver && \
-    chmod +x /opt/chromedriver/chromedriver && \
-    rm /tmp/chromedriver.zip
 
 # 임시 파일 삭제 (필요한 경우)
 RUN if [ -f /tmp/chrome-linux64.zip ] && [ -f /tmp/chromedriver-linux64.zip ] && [ -f /tmp/versions.json ]; then \
-        rm /tmp/chrome-linux64.zip /tmp/chromedriver-linux64.zip /tmp/versions.json; \
-    fi
+    rm /tmp/chrome-linux64.zip /tmp/chromedriver-linux64.zip /tmp/versions.json; \
+fi
 
 ENV CHROMEDRIVER_DIR /opt/chromedriver
 ENV PATH $CHROMEDRIVER_DIR:$PATH
-
-# RUN rm /tmp/chrome-linux64.zip /tmp/chromedriver-linux64.zip /tmp/versions.json
 
 # Python 환경 설정
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -87,16 +72,10 @@ RUN chmod +x entrypoint.sh
 # 사용자 추가
 RUN adduser --disabled-password --gecos '' python
 
-#작업 디렉터리 소유권 변경
+# 작업 디렉터리 소유권 변경
 RUN chown -R python:python /app
 
 USER python
-
-# 사용자 및 그룹 추가
-# RUN groupadd -r python && useradd -r -g python python
-
-# 권한 설정
-# RUN chown -R python:python /app
 
 # 애플리케이션 시작
 ENTRYPOINT ["/app/entrypoint.sh"]
