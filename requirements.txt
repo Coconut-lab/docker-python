@@ -12,3 +12,4 @@ typing_extensions==4.9.0
 yarl==1.9.3
 requests==2.31.0
 lxml==4.9.3
+webdriver_manager
