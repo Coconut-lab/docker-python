@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y wget xvfb unzip jq libxss1 libappindica
     libgbm1 libnss3 libatk-bridge2.0-0 libgtk-3-0 libx11-xcb1 libxcb-dri3-0 \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list \
-    && apt-get update && apt-get install -y google-chrome-stable=${CHROME_VERSION} \
+    && apt-get update && apt-get install -y google-chrome-stable=125.0.6422.114 \
     && CHROMEDRIVER_URL="https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" \
     && wget -q -O /tmp/chromedriver.zip $CHROMEDRIVER_URL \
     && unzip /tmp/chromedriver.zip -d /opt/chromedriver \
