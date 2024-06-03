@@ -16,7 +16,7 @@ RUN apt-get install -y libxss1 libappindicator1 libgconf-2-4 \
 
 # Chrome 및 ChromeDriver 버전 지정
 ENV CHROME_VERSION="125.0.6422.112"
-ENV CHROMEDRIVER_VERSION="125.0.6422.112"
+ENV CHROMEDRIVER_VERSION="125.0.6422.78"
 
 # Chrome 설치
 RUN apt-get update && \
