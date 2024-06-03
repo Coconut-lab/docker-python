@@ -4,6 +4,7 @@ from selenium import webdriver  # 웹 브라우저 자동화를 위한 라이브
 from selenium.common.exceptions import NoSuchElementException  # 셀레니움에서 발생하는 예외 처리
 from selenium.webdriver.chrome.service import Service  # 크롬 드라이버 서비스를 설정하기 위한 모듈
 from selenium.webdriver.common.keys import Keys  # 키보드 입력을 시뮬레이션하기 위한 모듈
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By  # HTML 요소를 찾기 위한 모듈
 from bs4 import BeautifulSoup  # HTML 및 XML 구문 분석을 위한 라이브러리
 from datetime import datetime  # 날짜 및 시간 관련 기능을 제공하는 모듈
@@ -33,7 +34,7 @@ def station(num):
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
 
-    service = Service(executable_path='/opt/chromedriver/chromedriver')
+    service = Service(ChromeDriverManager().install())
 
     dr = webdriver.Chrome(service=service, options=chrome_options)  # 크롬 드라이버를 사용하여 브라우저를 실행
     dr.get(url)  # 설정한 URL로 이동
